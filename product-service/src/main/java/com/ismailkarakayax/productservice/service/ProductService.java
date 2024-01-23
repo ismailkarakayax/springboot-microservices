@@ -1,11 +1,14 @@
 package com.ismailkarakayax.productservice.service;
 
 import com.ismailkarakayax.productservice.dto.ProductRequest;
+import com.ismailkarakayax.productservice.dto.ProductResponse;
 import com.ismailkarakayax.productservice.model.Product;
 import com.ismailkarakayax.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,4 +29,17 @@ public class ProductService {
     }
 
 
+    public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+       return products.stream().map(this::mapToProductResponse).toList();
+    }
+
+    private ProductResponse mapToProductResponse(Product product) {
+        return ProductResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .build();
+    }
 }
